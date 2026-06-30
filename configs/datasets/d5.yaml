@@ -1,0 +1,27 @@
+id: d5
+root: data/fifth_test_dataset
+n_mics: 9    # D_l, D_r, E, F_l, F_r, G_l, G_r, J_l, J_r — same as D3/D4
+n_vibrations: 4    # D, E, F, J — same as D3/D4
+accel_target_sr: 446   # derived empirically by scripts/derive_dataset_sampling_rate.py
+vibration_format: auto   # loader auto-picks raw (D5 ships both raw + peak)
+position_source: d3_position_json   # registry dispatches; reuses D3's parser
+position_path: data/fifth_test_dataset/position.json
+label_scheme: d5_healthy_or_knock
+window_scales_seconds: [0.5, 1.0, 2.0, 4.0]   # D3/D4 family
+v3_window_seconds: 1.0
+v4_window_seconds: 0.5
+accel_sr_overrides: {E: 471}   # per-sensor rate outliers vs dataset-wide accel_target_sr
+extra:
+  description: |
+    Fifth test dataset on the 3D-printed circular rig. Same sensor layout
+    and position.json as D3/D4. Two top-level groups:
+      * healthy/  — flat (no speed/context split). Treated as a single
+        healthy pool; joins D3/D4 speed{1,2,3} in the cross-dataset
+        healthy group. (See chapter 3 note on `speed{N}` = added-noise
+        augmentation, not operating mode.)
+      * knock/(x, y, z)/  — 6 spatial knock positions in centimetres,
+        parsed by the existing _D4_POS_RE regex.
+
+    Used for: V3 (held-out anomalies + part of healthy density fit),
+    V4 (supervised localization labels), inference smoke-tests.
+    NOT used for V1/V2 SSL pretraining.

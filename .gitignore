@@ -1,0 +1,46 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Type checker / editor
+.pyright/
+.vscode/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Runtime outputs
+artifacts/
+models/
+results/
+.feature_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Folder
+data/
+!src/data/
+artifacts/
+.venv/
+.github/
+.pytest_cache/
+__pycache__/
+results/
+docs/
+IMP/
+.ruff_cache/

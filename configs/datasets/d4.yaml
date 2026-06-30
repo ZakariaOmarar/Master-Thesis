@@ -1,0 +1,37 @@
+id: d4
+root: data/fourth_test_dataset
+n_mics: 9   # D_l, D_r, E, F_l, F_r, G_l, G_r, J_l, J_r — same layout as D3
+n_vibrations: 4   # D, E, F, J — same layout as D3
+# RAW vibration: ~376 Hz effective rate from the embedded board's 109-sample
+# DMA batches arriving every ~290 ms. This is the first dataset to provide
+# actual structure-borne waveforms (rather than the 4-16 Hz dominant-peak
+# stream of D1/D2/D3), so the runner-blade-passing (43.75 Hz), rotor-pole-
+# passing (100 Hz), and guide-vane-passing (125 Hz) frequencies are all
+# below the new Nyquist limit (~188 Hz) and recoverable.
+accel_target_sr: 376
+vibration_format: auto   # D4 ships only raw — auto resolves to raw
+position_source: d3_position_json   # D4 reuses D3's sensor layout
+position_path: data/third_test_dataset/position.json
+label_scheme: d4_speed_with_random
+window_scales_seconds: [0.5, 1.0, 2.0, 4.0]
+v3_window_seconds: 1.0
+v4_window_seconds: 0.5
+extra:
+  description: |
+    Fourth test dataset. 9 mics (incl. stereo L/R pairs) + 4 accelerometers,
+    reusing the D3 physical layout. Three healthy "speed" buckets
+    (`speed{1,2,3}`) and a RandomFault parent `RandomFault_knock_unter_speed1`
+    with seven spatial subfolders `(x, y, z)` (centimetres).
+
+    **speed{1,2,3} are healthy recordings with three levels of added acoustic
+    noise (an augmentation knob, NOT an operating mode).** They join the
+    cross-dataset healthy pool and must not be treated as a mode label.
+
+    Each recording is ~11 minutes long (vs ~7 minutes total for D3), and within
+    each RandomFault subfolder anomalies are sparse / non-continuous — the V3
+    per-cluster threshold gates them at scoring time, while V4's localization
+    head trains on the recording-level spatial label.
+
+    Use for: RQ1 (purity at scale), RQ2 (CNF threshold fitting on a much larger
+    healthy pool), RQ3 (real structure-borne TDOA features via the raw
+    vibration stream), RQ4a (noise-robustness conditioning).

@@ -1,0 +1,18 @@
+id: d2
+root: data/second_test_dataset
+n_mics: 5
+n_vibrations: 5
+accel_target_sr: 4
+vibration_format: auto   # D2 ships only peak — auto resolves to peak
+position_source: d2_node_position_txt   # registry dispatches to _parse_d2_node_position_txt
+position_path: data/second_test_dataset/node_position.txt
+label_scheme: d2_mode_with_spatial
+window_scales_seconds: [1.5, 3.0, 6.0]
+v3_window_seconds: 3.0
+v4_window_seconds: 1.5
+extra:
+  description: |
+    Second test dataset. 5 mics (D,E,F,G,I) + 5 vibrations (A,B,C,D,E),
+    positions in cm in node_position.txt. RandomFault subfolders encode the
+    spatial anomaly position and a mode-context token (e.g. "turbine_pump").
+    Use for RQ1 + RQ2 + RQ3.

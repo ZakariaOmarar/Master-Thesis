@@ -1,0 +1,103 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cmsc-net-hydro"
+version = "0.1.0"
+description = "Multimodal acoustic-vibration anomaly detection and source localization for reversible Francis pump-turbines (Master's thesis codebase)"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+authors = [{ name = "Zak" }]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.12",
+    "librosa>=0.10",
+    "pywavelets>=1.6",
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+    "lightgbm>=4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "ruff>=0.15",
+    "pyright>=1.1.400",
+]
+dl = [
+    "torch>=2.2",
+    "scikit-learn>=1.4",
+    "umap-learn>=0.5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "requires_data: test needs the real recordings under data/ (auto-skipped if absent)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Generated artefacts and thesis prose are not source code (and are git-ignored).
+extend-exclude = ["docs", "results", "data"]
+
+[tool.ruff.lint]
+# A focused, high-signal rule set. pycodestyle-naming (N) is deliberately NOT
+# enabled: the modelling code follows maths/ML convention, where single-capital
+# tensor/matrix names (X, W, H, B, C) and signal names (Xi, Xj, G) read more
+# clearly than snake_case and are used consistently throughout.
+select = ["E4", "E7", "E9", "W", "F", "I", "UP", "B", "C4", "RUF"]
+ignore = [
+    # Intentional Unicode in docstrings/comments/strings — the thesis prose
+    # uses §, ×, –, →, ≈, ≳ on purpose.
+    "RUF001", "RUF002", "RUF003",
+    # Explicit int() on NumPy scalars is deliberate (np.int64 → builtin int for
+    # indexing and JSON serialisation).
+    "RUF046",
+    # dict(key=value) is kept where it reads better than a brace literal for
+    # block-style keyword config (e.g. the sync-gate thresholds).
+    "C408",
+    # zip() strictness is decided per call site; some pairings are intentionally
+    # ragged or already length-checked upstream.
+    "B905",
+    # Unpacking every return value documents a function's contract or a tensor's
+    # shape (e.g. `B, T, C = x.shape`) even when one name is locally unused;
+    # renaming those to `_` would lose the dimension labels.
+    "RUF059",
+    # `seq + [item]` is as clear as `[*seq, item]`; not worth rewriting.
+    "RUF005",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Experiment drivers prepend the repo root to sys.path before importing `src`,
+# so their module-level imports legitimately follow that runtime setup (E402).
+# Exploratory scripts also favour compact one-line statements (E702/E731),
+# short throwaway names (E741), and the occasional unused loop index (B007);
+# none of those are worth enforcing in one-off analysis code.
+"scripts/**" = ["E402", "E702", "E731", "E741", "B007"]
+
+[tool.pyright]
+include = ["src"]
+extraPaths = ["src"]
+typeCheckingMode = "basic"
+# The scientific stack defeats several of pyright's standard checks: numpy
+# ufunc/overload signatures and torch's dynamic attributes are not modelled
+# precisely, so the categories below produce noise rather than real findings on
+# correct-at-runtime code (which the test suite exercises). They are downgraded
+# so the type-check gate stays meaningful for the bugs pyright *can* catch:
+# undefined names, unresolved imports, unbound variables, and `__all__` drift.
+reportArgumentType = "none"          # numpy / torch argument overloads
+reportCallIssue = "none"             # numpy / torch call overloads
+reportOperatorIssue = "none"         # numpy operator overloads
+reportAssignmentType = "none"        # numpy dtype assignment widening
+reportReturnType = "none"            # ndarray-vs-scalar return shapes
+reportOptionalMemberAccess = "none"  # dataset loaders are runtime-guarded by data presence
+reportOptionalSubscript = "none"     # ditto
+reportAttributeAccessIssue = "none"  # stdlib Path typing gaps under basic mode

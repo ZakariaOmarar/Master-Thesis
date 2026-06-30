@@ -1,0 +1,23 @@
+id: d3
+root: data/third_test_dataset
+n_mics: 9   # D_l, D_r, E, F_l, F_r, G_l, G_r, J_l, J_r
+n_vibrations: 4   # D, E, F, J
+accel_target_sr: 16   # native CSV cadence is ~16 Hz on D3
+vibration_format: auto   # D3 ships only peak — auto resolves to peak
+position_source: d3_position_json
+position_path: data/third_test_dataset/position.json
+label_scheme: d3_speed_with_hit
+window_scales_seconds: [0.5, 1.0, 2.0, 4.0]
+v3_window_seconds: 1.0
+v4_window_seconds: 0.5
+extra:
+  description: |
+    Third test dataset. 9 mics (incl. stereo L/R pairs) + 4 accelerometers,
+    positions in position.json.
+
+    **speed{1,2,3} are healthy recordings with three levels of added acoustic
+    noise (an augmentation knob, NOT an operating mode).** They join the
+    cross-dataset healthy pool and must not be treated as a mode label.
+    hit_between_Fl_Gr_speed1 contains an impulsive anomaly between Fl and Gr.
+    Use for RQ2 (cross-noise-level domain shift), RQ3, RQ4a (noise-robustness
+    conditioning).

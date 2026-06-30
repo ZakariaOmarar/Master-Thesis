@@ -1,0 +1,21 @@
+id: d1
+root: data/first_test_dataset
+n_mics: 4
+n_vibrations: 4
+# CSV cadence ≈ 3 Hz on D1; we keep it at the native 4 Hz target so the
+# WavVibrationAdapter does light upsampling rather than throwing away samples.
+accel_target_sr: 4
+vibration_format: auto   # D1 ships only peak — auto resolves to peak
+position_source: default   # D1 has no native positions — synthesized geometry
+position_path: null
+label_scheme: d1_mode
+window_scales_seconds: [1.5, 3.0, 6.0]   # V1/V2 multi-scale (was WINDOWING.window_scales_seconds_per_dataset)
+v3_window_seconds: 3.0
+v4_window_seconds: 1.5
+# hop_length removed 2026-05-21: empirical grid sweep (chapter 3 §3.4.2)
+# showed hop is irrelevant. Single global value from ACOUSTIC_FEATURES.
+extra:
+  description: |
+    First test dataset. 4 mics (B,C,D,E) + 4 vibrations (B,C,D,E).
+    Folder labels: Pump / Standstill / Turbine / RandomFault. No spatial labels.
+    Use for RQ1 (mode + global anomaly).

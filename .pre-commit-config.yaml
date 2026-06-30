@@ -1,0 +1,18 @@
+# Run `pre-commit install` once; hooks then run on staged files before each
+# commit. Ruff's version is kept loosely in step with the dev extra in
+# pyproject.toml. See https://pre-commit.com.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.0
+    hooks:
+      - id: ruff            # lint (auto-fix safe issues)
+        args: [--fix]
+      - id: ruff-format     # format changed files (gradual adoption)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict

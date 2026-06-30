@@ -1,0 +1,24 @@
+id: illwerke_raw
+aliases: [illwerke]   # legacy alias preserved for older checkpoints
+# Stub config for the future Illwerke raw delivery (constraint #3 in the plan).
+# When raw 16 kHz mic + vibration recordings arrive, drop them at this `root`
+# in the same folder convention as the test datasets and uncomment.
+root: data/illwerke_raw   # not present yet — runtime FileNotFoundError is expected if used
+n_mics: 9     # ROW II nominal: 4 (level 1) + 5 (level 2)
+n_vibrations: 4
+accel_target_sr: 4
+vibration_format: auto
+position_source: rowii   # use the SENSOR_LAYOUT-derived geometry from src/config/constants.py
+position_path: null
+label_scheme: d1_mode    # placeholder — refine when the actual labelling scheme is known
+window_scales_seconds: [1.5, 3.0, 6.0]   # placeholder; refine on day-of-arrival
+v3_window_seconds: 3.0
+v4_window_seconds: 1.5
+extra:
+  description: |
+    FUTURE Illwerke raw deployment. This config exists today to validate the
+    constraint-#3 contract: when raw data arrives, ingestion is a YAML edit only.
+    On day-of-arrival, point `root` at the new directory tree, refine
+    `label_scheme` to match the delivered labelling, and run V2 forward pass to
+    verify finite c_t + Hungarian-matched mode agreement vs the existing
+    Layer-1 oracle.
