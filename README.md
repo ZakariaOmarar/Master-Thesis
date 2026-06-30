@@ -1,7 +1,5 @@
 # CMSC_Net_Hydro
 
-[![CI](https://github.com/ZakariaOmarar/CMSC_Net_Hydro/actions/workflows/ci.yml/badge.svg)](https://github.com/ZakariaOmarar/CMSC_Net_Hydro/actions/workflows/ci.yml)
-
 Multimodal acoustic + vibration anomaly detection and source localization for
 reversible Francis pump-turbines. This is the implementation accompanying a
 Master's thesis; it realizes the chained **V0 → V5** label-free pipeline.
